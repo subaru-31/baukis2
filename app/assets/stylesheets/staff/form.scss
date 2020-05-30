@@ -34,6 +34,9 @@ div#wrapper {
             display: inline-block;
           }
         }
+        input[type="checkbox"] + label {
+          display: inline-block;
+        }
         div.buttons {
           text-align: center;
           input[type="submit"] {
