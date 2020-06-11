@@ -93,4 +93,7 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
+  config.before do
+    Rails.application.config.baukis2[:restrict_ip_addresses] = false
+  end
 end
