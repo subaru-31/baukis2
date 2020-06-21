@@ -43,7 +43,8 @@ describe "職員による自分のアカウントの管理" do
 
     it "email属性を変更する" do
       params_hash.merge!(email: "test@email.com")
-      patch staff_account_url, params: { staff_member: params_hash }
+      patch confirm_staff_account_url, params: { staff_member: params_hash }
+      patch staff_account_url, params: { staff_member: params_hash, commit: true }
       staff_member.reload
       expect(staff_member.email).to eq("test@email.com")
     end
@@ -60,5 +61,4 @@ describe "職員による自分のアカウントの管理" do
       }.not_to change { staff_member.end_date }
     end
   end
-
 end

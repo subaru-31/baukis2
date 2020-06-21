@@ -6,12 +6,28 @@ Rails.application.routes.draw do
       root "top#index"
       get "login" => "sessions#new", as: :login
       resource :session, only: [ :create, :destroy ]
-      resource :account, except: [ :new, :create, :destroy ]
+      resource :account, except: [ :new, :create, :destroy ] do
+        patch :confirm
+      end
       resource :password, only: [ :show, :edit, :update ]
       resources :customers
       resources :programs do
         resources :entries, only: [] do
           patch :update_all, on: :collection
+        end
+      end
+      get "messages/count" => "ajax#message_count"
+      post "messages/:id/tag" => "ajax#add_tag", as: :tag_message
+      delete "messages/:id/tag" => "ajax#remove_tag"
+      resources :messages, only: [:index, :show, :destroy] do
+        get :inbound, :outbound, :deleted, on: :collection
+        resource :reply, only: [:new, :create] do
+          post :confirm
+        end
+      end
+      resources :tags, only: [] do
+        resources :messages, only: [ :index ] do
+          get :inbound, :outbound, :deleted, on: :collection
         end
       end
     end
@@ -44,6 +60,9 @@ Rails.application.routes.draw do
         resource :entry, only: [ :create ] do
           patch :cancel
         end
+      end
+      resources :messages, only: [ :new, :create ] do
+        post :confirm, on: :collection
       end
     end
   end
